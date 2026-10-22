@@ -30,4 +30,16 @@ class GameOfLifeTest extends TestCase{
 
         $this->assertTrue($game->board()[1][1]);
     }
+
+    public function test_dead_cell_with_three_live_neighbours_becomes_alive(): void{
+        $game = new GameOfLife([
+            [true,  true,  true],
+            [false, false, false],
+            [false, false, false],
+        ]);
+
+        $game->nextGen();
+
+        $this->assertTrue($game->board()[1][1]);
+    }
 }
