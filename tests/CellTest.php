@@ -17,4 +17,20 @@ class CellTest extends TestCase{
 
         $this->assertFalse($cell->isAlive());
     }
+
+    public function test_alive_cell_can_become_dead(): void{
+        $cell = new Cell(true);
+
+        $cell->toggleState();
+
+        $this->assertFalse($cell->isAlive());
+    }
+
+    public function test_dead_cell_can_become_alive(): void{
+        $cell = new Cell(false);
+
+        $cell->toggleState();
+
+        $this->assertTrue($cell->isAlive());
+    }
 }
