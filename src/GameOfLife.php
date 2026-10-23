@@ -3,28 +3,29 @@
 namespace Pablo\GameOfLifeKata;
 
 class GameOfLife{
-    private array $rules;
-
-    public function __construct(private Board $board){
-        $this->rules = [
-            new SurvivalRule(),
-            new BirthRule(),
-        ];
+    public function __construct(private Board $board, private array $rules){
+        foreach($this->rules as $rule){
+            if(!$rule instanceof Rule){
+                throw new \TypeError(
+                    'Every rule must implement the Rule interface.'
+                );
+            }
+        }
     }
 
     public function nextGen(): void{
         $currentBoard = $this->board->toArray();
         $nextBoard = [];
 
-        foreach ($currentBoard as $row => $cells) {
-            foreach ($cells as $column => $alive) {
+        foreach($currentBoard as $row => $cells){
+            foreach($cells as $column => $alive){
                 $neighbours = $this->board->countLiveNeighbours($row, $column);
                 $cell = new Cell($alive);
 
                 $nextState = false;
 
-                foreach ($this->rules as $rule) {
-                    if ($rule->appliesTo($cell, $neighbours)) {
+                foreach($this->rules as $rule){
+                    if($rule->appliesTo($cell, $neighbours)){
                         $nextState = $rule->nextState($cell, $neighbours);
                         break;
                     }

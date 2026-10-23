@@ -4,6 +4,8 @@ namespace Pablo\GameOfLifeKata\Tests;
 
 use Pablo\GameOfLifeKata\GameOfLife;
 use Pablo\GameOfLifeKata\Board;
+use Pablo\GameOfLifeKata\SurvivalRule;
+use Pablo\GameOfLifeKata\BirthRule;
 use PHPUnit\Framework\TestCase;
 
 class GameOfLifeTest extends TestCase{
@@ -12,7 +14,7 @@ class GameOfLifeTest extends TestCase{
             [false, false, false],
             [false, true, false],
             [false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -25,7 +27,7 @@ class GameOfLifeTest extends TestCase{
             [false, false, false],
             [true, true, true],
             [false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -37,7 +39,7 @@ class GameOfLifeTest extends TestCase{
             [true,  true,  true],
             [false, false, false],
             [false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -50,7 +52,7 @@ class GameOfLifeTest extends TestCase{
             [false, false, false],
             [true, true, false],
             [false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -62,7 +64,7 @@ class GameOfLifeTest extends TestCase{
             [true, false, true],
             [false, true, false],
             [true, false, true],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -74,7 +76,7 @@ class GameOfLifeTest extends TestCase{
             [true, true, false],
             [false, false, false],
             [false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -90,7 +92,7 @@ class GameOfLifeTest extends TestCase{
             [false, true, true, true, false],
             [false, false, false, false, false],
             [false, false, false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -110,7 +112,7 @@ class GameOfLifeTest extends TestCase{
             [false, true, true, true, false],
             [false, false, false, false, false],
             [false, false, false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
         $game->nextGen();
@@ -129,7 +131,7 @@ class GameOfLifeTest extends TestCase{
             [true, false, false],
             [false, false, false],
             [false, false, false],
-        ]));
+        ]), [new SurvivalRule(), new BirthRule()]);
 
         $game->nextGen();
 
@@ -146,7 +148,21 @@ class GameOfLifeTest extends TestCase{
             [false, false, false],
         ]);
 
-        $game = new GameOfLife($board);
+        $game = new GameOfLife($board, [new SurvivalRule(), new BirthRule()]);
+
+        $game->nextGen();
+
+        $this->assertFalse($game->board()[1][1]);
+    }
+
+    public function test_uses_injected_rules(): void{
+        $board = new Board([
+            [false, false, false],
+            [true, true, true],
+            [false, false, false],
+        ]);
+
+        $game = new GameOfLife($board, []);
 
         $game->nextGen();
 
