@@ -5,7 +5,7 @@ namespace Pablo\GameOfLifeKata;
 class GameOfLife{
     private array $rules;
 
-    public function __construct(private array $board){
+    public function __construct(private Board $board){
         $this->rules = [
             new SurvivalRule(),
             new BirthRule(),
@@ -13,11 +13,12 @@ class GameOfLife{
     }
 
     public function nextGen(): void{
-        $nextBoard = $this->board;
+        $currentBoard = $this->board->toArray();
+        $nextBoard = [];
 
-        foreach($this->board as $row => $cells){
-            foreach($cells as $column => $alive){
-                $neighbours = $this->countLiveNeighbours($row, $column);
+        foreach ($currentBoard as $row => $cells) {
+            foreach ($cells as $column => $alive) {
+                $neighbours = $this->board->countLiveNeighbours($row, $column);
                 $cell = new Cell($alive);
 
                 $nextState = false;
@@ -33,31 +34,10 @@ class GameOfLife{
             }
         }
 
-        $this->board = $nextBoard;
-    }
-
-    private function countLiveNeighbours(int $row, int $column): int{
-        $count = 0;
-
-        for($rowOffset = -1; $rowOffset <= 1; $rowOffset++){
-            for($columnOffset = -1; $columnOffset <= 1; $columnOffset++){
-                if($rowOffset === 0 && $columnOffset === 0){
-                    continue;
-                }
-
-                $neighbourRow = $row + $rowOffset;
-                $neighbourColumn = $column + $columnOffset;
-
-                if($this->board[$neighbourRow][$neighbourColumn] ?? false){
-                    $count++;
-                }
-            }
-        }
-
-        return $count;
+        $this->board = new Board($nextBoard);
     }
 
     public function board(): array{
-        return $this->board;
+        return $this->board->toArray();
     }
 }
